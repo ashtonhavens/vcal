@@ -2,6 +2,7 @@
 <html>
     <head>
         <title>VCal - The Visual Calendar</title>
+        <link rel="icon" type="image/x-icon" href="vcal.png">
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
 
@@ -17,7 +18,7 @@
                 opacity: 0;
                 background-color: #2b2b2b;
                 padding: 10px;
-                position: absolute;
+                position: fixed;
                 z-index: 1000;
                 pointer-events: none;
                 max-width: 250px;
@@ -29,12 +30,20 @@
             }
             #hoverdesc {
                 font-size: 16px;
+                color: #d3d3d3;
+            }
+            #hoverdate {
+                margin-top: 8px;
+                font-size: 12px;
+                color: #adadad;
+                font-style: italic;
             }
 
 
             #main-calendar-container {
                 margin: 20px;
                 width: auto;
+                margin-top: 150px;
             }
             #calendar-container {
                 
@@ -59,7 +68,6 @@
                 transform: translateY(-50%);
                 border-radius: 10px;
                 background-color: #1a1a1a;
-                box-shadow: 0 2px 8px #00000093;
                 padding: 14px 2px 10px 2px;
             }
             .date {
@@ -76,12 +84,10 @@
                 height: 200px;
                 background-color: #1a1a1a;
                 border-radius: 15px;
-                box-shadow: 0 2px 12px #00000093;
                 opacity: 1;
                 overflow-x: scroll;
                 overflow-y: hidden;
                 scrollbar-width: none;
-                border: 1px solid #222222a4;
             }
             
             .cal-bars {
@@ -108,6 +114,7 @@
                 z-index: 1;
                 opacity: 0.5;
                 transition: ease 0.2s opacity;
+                cursor: pointer;
             }
             .event:hover {
                 opacity: 0.7;
@@ -119,57 +126,135 @@
                 width: 100%;
                 height: 100%;
             }
+
+            #header {
+                position: fixed;
+                width: 100%;
+                height: 125px;
+                z-index: 100;
+                top: 0;
+            }
+            #header-main {
+                background-color: #1a1a1a;
+                border-radius: 15px;
+                box-shadow: 0 5px 50px #000000;
+                margin: 25px;
+                height: 100px;
+                text-align: right;
+                padding: 15px;
+                box-sizing: border-box;
+            }
+            #header-grad {
+                position: absolute;
+                z-index: -1;
+                background: linear-gradient(to bottom, #000000ab, #00000000);
+                height: 100%;
+                width: 100%;
+                top: 0;
+                left: 0;
+                pointer-events: none;
+            }
+
+            button {
+                color: inherit;
+                font: inherit;
+                border: none;
+                background-color: #2e2e2e;
+                box-shadow: 0 2px 5px #0000008a;
+                cursor: pointer;
+                transition: ease 0.2s background-color;
+                border-radius: 1000px;
+            }
+
+            #new-event-button {
+                width: 70px;
+                height: 70px;
+                font-size: 60px;
+            }
+            button:hover {
+                background-color: #414141;
+            }
+            button:active {
+                background-color: #363636;
+            }
+            #new-event-button span {
+                position: relative;
+                top: -6px;
+            }
+            .current-time {
+                opacity: 0;
+                position: relative;
+                
+            }
+
+
+            #dialog {
+                position: fixed;
+                top: 0;
+                left: 0;
+                z-index: 100000;
+                background-color: #0000005e;
+                backdrop-filter: blur(5px);
+                width: 100%;
+                height: 100%;
+                transition: 0.2s ease opacity;
+                opacity: 0;
+                display: none;
+            }
+            #dialogmain {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                width: 450px;
+                height: 600px;
+                transform: translate(-50%, -50%);
+                background-color: #1a1a1a;
+                border-radius: 15px;
+                box-shadow: 0 2px 5px #0000008a;
+            }
+            #close-button {
+                width: 35px;
+                height: 35px;
+                right: 10px;
+                top: 10px;
+                position: absolute;
+            }
+
+            input {
+                background-color: #2c2c2c;
+                border: none;
+                color: inherit;
+                font: inherit;
+                font-family: 'Roboto Condensed', sans-serif;
+                border-radius: 5px;
+                width: 100%;
+            }
+            input:focus {
+                outline: none;
+                background-color: #303030
+            }
+
+            #submitbutton {
+                background-color: #1b2e16;
+            }
+            #submitbutton:hover {
+                background-color: #294223;
+            }
+            #submitbutton:active {
+                background-color: #21381c;
+            }
         </style>
     </head>
     <body>
-        <div id="main-calendar-container">
-            <div id="calendar-container">
-                <div class="calpart-cont">
-                    <div class="sidebar-info">
-                        <div>
-                            <div class="day">
-                                MON
-                            </div>
-                            <div class="date">
-                                10/28
-                            </div>
-                        </div>
-                    </div>
-                    <div class="calendar-part">
-                        <div class="event-container">
-                            <div class="event" style="left: 50%; width: 5%" _title="tgmgir">
-                                <div class="event-body" style="background-color: #a7000093;"></div>
-                            </div>
-                        </div>
-                        <div class="cal-bars">
-                            <div class="cal-bar"></div>
-                            <div class="cal-bar"></div>
-                            <div class="cal-bar"></div>
-                            <div class="cal-bar"></div>
-                            <div class="cal-bar"></div>
-                            <div class="cal-bar"></div>
-                            <div class="cal-bar"></div>
-                            <div class="cal-bar"></div>
-                            <div class="cal-bar"></div>
-                            <div class="cal-bar"></div>
-                            <div class="cal-bar"></div>
-                            <div class="cal-bar"></div>
-                            <div class="cal-bar"></div>
-                            <div class="cal-bar"></div>
-                            <div class="cal-bar"></div>
-                            <div class="cal-bar"></div>
-                            <div class="cal-bar"></div>
-                            <div class="cal-bar"></div>
-                            <div class="cal-bar"></div>
-                            <div class="cal-bar"></div>
-                            <div class="cal-bar"></div>
-                            <div class="cal-bar"></div>
-                            <div class="cal-bar"></div>
-                            <div class="cal-bar"></div>
-                        </div>
-                    </div>
-                </div>
+        <div id="header">
+            <div id="header-main">
+                <div style="position: absolute; top: 50%; left: 50px; transform: translateY(-30%); font-size: 40px;">VCal</div>
+                <button id="new-event-button" onclick="new_event_popup()"><span>+</span></button>
             </div>
+            <div id="header-grad"></div>
+        </div>
+        <div id="main-calendar-container">
+            <div id="calendar-container"></div>
         </div>
 
         <div id="hovertext">
@@ -178,63 +263,152 @@
             <div id="hoverdate"></div>
         </div>
 
+        <div id="dialog">
+            <div id="dialogmain" style="padding: 40px; padding-top: 0; box-sizing: border-box;">
+                <button id="close-button" onclick="close_dialog()">X</button>
+                <div style="margin: auto; width: fit-content; margin-top: 50px; font-size: 25px;">Add Event</div>
+                <div style="display: flex; margin-top: 30px;">
+                    <span style="margin-right: 15px;">Title</span><input id="title-input">
+                </div>
+                <div style="display: flex; margin-top: 10px;">
+                    <span style="margin-right: 15px;">Description</span><input id="desc-input">
+                </div>
+                <div style="display: flex; margin-top: 40px;">
+                    <span style="margin-right: 15px;">Start</span><input id="startdate-input" type="datetime-local">
+                </div>
+                <div style="display: flex; margin-top: 10px;">
+                    <span style="margin-right: 15px;">End</span><input id="enddate-input" type="datetime-local">
+                </div>
+                <div style="display: flex; margin-top: 40px;">
+                    <span style="margin-right: 15px;">Repeat</span><input id="repeat-input" type="checkbox" style="width: fit-content;">
+                </div>
+                <div style="display: flex; margin-top: 5px; margin-left: 15px;">
+                    <span style="margin-right: 15px;">Sunday</span><input id="sunday-input" type="checkbox" style="width: fit-content;">
+                </div>
+                <div style="display: flex; margin-top: 5px; margin-left: 15px;">
+                    <span style="margin-right: 15px;">Monday</span><input id="monday-input" type="checkbox" style="width: fit-content;">
+                </div>
+                <div style="display: flex; margin-top: 5px; margin-left: 15px;">
+                    <span style="margin-right: 15px;">Tuesday</span><input id="tuesday-input" type="checkbox" style="width: fit-content;">
+                </div>
+                <div style="display: flex; margin-top: 5px; margin-left: 15px;">
+                    <span style="margin-right: 15px;">Wednesday</span><input id="wednesday-input" type="checkbox" style="width: fit-content;">
+                </div>
+                <div style="display: flex; margin-top: 5px; margin-left: 15px;">
+                    <span style="margin-right: 15px;">Thursday</span><input id="thursday-input" type="checkbox" style="width: fit-content;">
+                </div>
+                <div style="display: flex; margin-top: 5px; margin-left: 15px;">
+                    <span style="margin-right: 15px;">Friday</span><input id="friday-input" type="checkbox" style="width: fit-content;">
+                </div>
+                <div style="display: flex; margin-top: 5px; margin-left: 15px;">
+                    <span style="margin-right: 15px;">Saturday</span><input id="saturday-input" type="checkbox" style="width: fit-content;">
+                </div>
+                <button id="submitbutton" style="width: 100px; height: 35px; position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%);" onclick="add_event()">Add</button>
+            </div>
+        </div>
+
         <script>
             const m_cc = document.getElementById('main-calendar-container');
             const cc = document.getElementById('calendar-container');
 
+
+
+            const dialog = document.getElementById('dialog');
+
+
+            const titleinput = document.getElementById('title-input');
+            const descinput = document.getElementById('desc-input');
+            const startinput = document.getElementById('startdate-input');
+            const endinput = document.getElementById('enddate-input');
+            const repeatinput = document.getElementById('repeat-input');
+
+            const suninput = document.getElementById('sunday-input');
+            const moninput = document.getElementById('monday-input');
+            const tueinput = document.getElementById('tuesday-input');
+            const wedinput = document.getElementById('wednesday-input');
+            const thuinput = document.getElementById('thursday-input');
+            const friinput = document.getElementById('friday-input');
+            const satinput = document.getElementById('saturday-input');
+
+
+
             const months = 'January February March April May June July August September October November December'.split(' ');
 
-            const cal_data = {
-                'events': [
-                    {
-                        'name': 'Event',
-                        'desc': 'Description',
-                        'time': {
-                            'all_day': false, // if all day ignore timezones
-                            'start': [2009, 1, 2, 30, 21, 30, 0], // year day month date hours minutes seconds
-                            'end': null,
-                            'repeat': {
-                                'repeat_type': 'year', // day, week, month, year
-                                'days': [0],
-                            }
-                        },
-                        'color': '#ffffff',
-                    },
-                    {
-                        'name': 'Event',
-                        'desc': 'lorem ipsum dolor sit amet, consectetur adisciping elit',
-                        'time': {
-                            'all_day': false, // if all day ignore timezones
-                            'start': [2025, 2, 9, 28, 21, 30, 0], // year day month date hours minutes seconds
-                            'end': [2025, 2, 9, 29, 12, 30, 0],
-                            'repeat': null
-                        },
-                        'color': '#9fff9f',
-                    },
-                ],
-                'overlays': [
-                    {
-                        'name': 'school',
-                        'desc': 'Description',
-                        'time': {
-                            'all_day': false, // if all day ignore timezones
-                            'start': [2009, 1, 2, 30, 21, 30, 0], // year day month date hours minutes seconds
-                            'end': null,
-                            'repeat': {
-                                'repeat_type': 'week', // day, week, month, year
-                                'days': [0,1,2,3,4], // ADDED to the INITIAL date (%7) to combat timezone issues
-                            }
-                        },
-                        'color': '#005bff',
-                    }
-                ],
-                'tasks': [
-                    
-                ],
-                'holidays': [
+            var vff = localStorage.getItem('cal_data');
 
-                ]
+            var cal_data = vff ? JSON.parse(vff) : {
+                'events': [
+                    // {
+                    //     'name': 'Event',
+                    //     'desc': 'Description',
+                    //     'time': {
+                    //         'all_day': false, // if all day ignore timezones
+                    //         'start': [2009, 1, 2, 30, 21, 30, 0], // year day month date hours minutes seconds
+                    //         'end': null,
+                    //         'repeat': {
+                    //             'repeat_type': 'year', // day, week, month, year
+                    //             'days': [0],
+                    //         }
+                    //     },
+                    //     'color': '#ffffff',
+                    // },
+                    // {
+                    //     'name': 'Event',
+                    //     'desc': 'lorem ipsum dolor sit amet, consectetur adisciping elit',
+                    //     'time': {
+                    //         'all_day': false, // if all day ignore timezones
+                    //         'start': [2025, 2, 9, 21, 21, 30, 0], // year day month date hours minutes seconds
+                    //         'end': [2025, 2, 9, 22, 12, 30, 0],
+                    //         'repeat': {
+                    //             'repeat_type': 'week',
+                    //             'days': [0, 1],
+                    //         }
+                    //     },
+                    //     'color': '#9fff9f',
+                    // },
+                    // {
+                    //     'name': 'fqwefwe',
+                    //     'desc': 'wwwwwwww',
+                    //     'time': {
+                    //         'all_day': false, // if all day ignore timezones
+                    //         'start': [2025, 2, 10, 4, 6, 30, 0], // year day month date hours minutes seconds
+                    //         'end': [2025, 2, 10, 4, 12, 30, 0],
+                    //         'repeat': {
+                    //             'repeat_type': 'week',
+                    //             'days': [0],
+                    //         }
+                    //     },
+                    //     'color': '#ff6f4b',
+                    // },
+                ],
             };
+
+            const oneday = 1000 * 60 * 60 * 24;
+
+            var is_dialog_up = false;
+            var mouse = [0,0];
+
+            function new_event_popup() {
+                if (is_dialog_up) return;
+
+                is_dialog_up = true;
+
+                dialog.style.display = 'block';
+                requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    dialog.style.opacity = '1';
+                })});
+            }
+            function close_dialog() {
+                if (!is_dialog_up) return;
+                
+                is_dialog_up = false;
+                dialog.style.opacity = '0';
+                setTimeout(() => {
+                    dialog.style.display = 'none';
+                }, 200)
+            }
+
 
             function get_timezone() {
                 return Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -244,8 +418,7 @@
                 return new Date(Date.UTC(year, month, date, hour, minute, second, 0));
             }
 
-            function local_date_to_utc() {
-                let local_time = document.getElementById("localtime").value;
+            function local_date_to_utc(local_time) {
                 let utz = get_timezone();
                 let local_date = new Date(local_time);
 
@@ -256,52 +429,74 @@
                 );
 
                 console.log(utc_date.toUTCString(), utc_date.getUTCDay(), utc_date.getUTCMonth(), utc_date.getUTCDate(), utc_date.getUTCHours(), utc_date.getUTCMinutes(), utc_date.getUTCSeconds());
+                return utc_date;
+
             }
 
-            function add_calendar_part(type, day, month, date, year) {
+            function click_event(i) {}
 
-                var events = '';
+            var is_clickdragging = false;
+            var clickdrag_ele;
+            var clickdrag_start = 0;
+            function start_clickdrag(ele) {
+                clickdrag_ele = ele;
+                clickdrag_start = mouse[0];
+            }
+            function stop_clickdrag() {
+                is_clickdragging = false;
+            }
+            onmouseup = stop_clickdrag;
 
-                for (let event of cal_data.events) {
-                    let start = event.time.start;
-                    let end = event.time.end;
-                    let start_date = parse_date(start[0], start[2], start[3], start[4], start[5], start[6]);
-                    let end_date = (end ? parse_date(end[0], end[2], end[3], end[4], end[5], end[6]) : null);
+            function add_calendar_part(type, cur_date) {
+                var curvisible = 0;
 
+                var year = cur_date.getFullYear();
+                var month = cur_date.getMonth();
+                var date = cur_date.getDate();
+                var day = cur_date.getDay();
 
-                    // absolute mess
+                function get_formatted_datestring(start_date, end_date) {
+                    var visdate = `${months[start_date.getMonth()].substr(0,3)}&nbsp;${start_date.getDate()}&nbsp;${start_date.getHours()%12}:${start_date.getMinutes()}&nbsp;${start_date.getHours() < 12 ? 'A':'P'}M`;
+                    if (end_date) {
+                        visdate += ` - ${months[end_date.getMonth()].substr(0,3)}&nbsp;${end_date.getDate()}&nbsp;${end_date.getHours()%12}:${end_date.getMinutes()}&nbsp;${end_date.getHours() < 12 ? 'A':'P'}M`;
+                    }
+                    return visdate;
+                }
+
+                function if_the_date_fits(start_date, end_date, cur_date) {
                     var vis = null;
 
-                    let rtype = event.time.repeat ? event.time.repeat.repeat_type : '';
+                    var year = cur_date.getFullYear();
+                    var month = cur_date.getMonth();
+                    var date = cur_date.getDate();
 
-                    var visdate = '';
-
-                    let indeterminate_year = rtype == 'year' || (((end_date && year == end_date.getFullYear()) || year == start_date.getFullYear()));
+                    let indeterminate_year = (end_date && year === end_date.getFullYear()) || year === start_date.getFullYear();
                     let between_year = !indeterminate_year && end_date && year > start_date.getFullYear() && year < end_date.getFullYear();
 
                     if (between_year) {
                         vis = ['0px', '100%'];
-                        visdate = `${months[start_date.getMonth()].substr(0,2)}`;
                     } else if (indeterminate_year) {
-                        let indeterminate_month = rtype == 'month' || (((end_date && month == end_date.getMonth()) || month == start_date.getMonth()));
+                        let indeterminate_month = (end_date && month === end_date.getMonth()) || month === start_date.getMonth();
                         let between_month = !indeterminate_month && end_date && month > start_date.getMonth() && month < end_date.getMonth();
                         
-                        if (between_month) vis = ['0px', '100%'];
-                        else if (indeterminate_month) {
-                            let indeterminate_day = rtype == 'day' || (((end_date && date == end_date.getDate()) || date == start_date.getDate()));
+                        if (between_month) {
+                            vis = ['0px', '100%'];
+                        } else if (indeterminate_month) {
+                            let indeterminate_day = (end_date && date === end_date.getDate()) || date === start_date.getDate();
                             let between_day = !indeterminate_day && end_date && date > start_date.getDate() && date < end_date.getDate();
 
-                            if (between_day) vis = ['0px', '100%'];
-                            else if (indeterminate_day) {
+                            if (between_day) {
+                                vis = ['0px', '100%'];
+                            } else if (indeterminate_day) {
                                 var pos = 0;
                                 var width = 100;
-                                if (date == start_date.getDate()) {
+                                if (date === start_date.getDate()) {
                                     pos = (start_date.getHours()*60 + start_date.getMinutes()) / 1440 * 100;
                                 }
                                 if (!end_date) {
                                     width = 2;
                                 } else {
-                                    if (date == end_date.getDate()) {
+                                    if (date === end_date.getDate()) {
                                         width = (end_date.getHours()*60 + end_date.getMinutes()) / 1440 * 100 - pos;
                                     } else {
                                         width = 100 - pos;
@@ -312,18 +507,75 @@
                         }
                     }
 
-                    if (vis) {
-                        events += `
-                        <div class="event" style="left: ${vis[0]}; width: ${vis[1]}" _title="${event.name}" _desc="${event.desc}" _date="${visdate}">
-                            <div class="event-body" style="background-color: ${event.color};"></div>
-                        </div>
-                        `;
+                    return vis;
+                }
+
+                var events = '';
+
+                var i = 0;
+                for (let event of cal_data.events) {
+                    i += 1;
+                    let start = event.time.start;
+                    let end = event.time.end;
+                    let start_date = parse_date(start[0], start[2], start[3], start[4], start[5], start[6]);
+                    let end_date = (end ? parse_date(end[0], end[2], end[3], end[4], end[5], end[6]) : start_date);
+
+                    let repeat = event.time.repeat;
+                    let rtype = repeat ? repeat.repeat_type : false;
+
+                    if (rtype === 'week') {
+                        for (let daynum of repeat.days) {
+                            var nstart_date = new Date(Date.parse(start_date.toString()) + oneday*(daynum));
+                            var nend_date = new Date(Date.parse(end_date.toString()) + oneday*(daynum));
+                            var ncur_date = new Date(Date.parse(nstart_date.toString()) + oneday*(cur_date.getDay() - nstart_date.getDay()));
+
+                            let vis = if_the_date_fits(nstart_date, nend_date, ncur_date);
+
+                            var start_realday = new Date(Date.parse(cur_date.toString()) - oneday*(cur_date.getDay() - nstart_date.getDay()));
+                            var start_vis = new Date(start_realday.getFullYear(), start_realday.getMonth(), start_realday.getDate(), nstart_date.getHours(), nstart_date.getMinutes(), nstart_date.getSeconds());
+                            var end_realday = new Date(Date.parse(cur_date.toString()) - oneday*(cur_date.getDay() - nend_date.getDay()));
+                            var end_vis = new Date(end_realday.getFullYear(), end_realday.getMonth(), end_realday.getDate(), nend_date.getHours(), nend_date.getMinutes(), nend_date.getSeconds());
+
+                            visdate = get_formatted_datestring(start_vis, end_vis);
+
+                            if (vis) {
+                                events += `
+                                <div class="event" onclick="click_event(${i-1})" style="left: ${vis[0]}; width: ${vis[1]}; top: -${curvisible*100}%" _title="${event.name}" _desc="${event.desc}" _date="${visdate}">
+                                    <div class="event-body" style="background-color: ${event.color};"></div>
+                                </div>
+                                `;
+                                curvisible += 1;
+                            }
+                        }
+                    } else if (!repeat) {
+                        let vis = if_the_date_fits(start_date, end_date, cur_date);
+                        visdate = get_formatted_datestring(start_date, end_date);
+                        if (vis) {
+                            events += `
+                            <div class="event" onclick="click_event(${i-1})" style="left: ${vis[0]}; width: ${vis[1]}; top: -${curvisible*100}%" _title="${event.name}" _desc="${event.desc}" _date="${visdate}">
+                                <div class="event-body" style="background-color: ${event.color};"></div>
+                            </div>
+                            `;
+                        }
+                        curvisible += 1;
                     }
+
+                    // let vis = if_the_date_fits(start_date, end_date, cur_date);
+
+                    // visdate = get_formatted_datestring(start_date, end_date);
+
+                    // if (vis) {
+                    //     events += `
+                    //     <div class="event" onclick="click_event(${i-1})" style="left: ${vis[0]}; width: ${vis[1]}" _title="${event.name}" _desc="${event.desc}" _date="${visdate}">
+                    //         <div class="event-body" style="background-color: ${event.color};"></div>
+                    //     </div>
+                    //     `;
+                    // }
                 }
 
                 cc.innerHTML +=`
 
-                <div class="calpart-cont">
+                <div class="calpart-cont" onmousedown="start_clickdrag(this)">
                     <div class="sidebar-info">
                         <div>
                             <div class="day">
@@ -364,22 +616,82 @@
                             <div class="cal-bar"></div>
                             <div class="cal-bar"></div>
                         </div>
+                        <div class="current-time"></div>
                     </div>
                 </div>
                 
                 `
             }
 
-            add_calendar_part(0, 2, 9,28,2025)
-            add_calendar_part(0, 2, 9,29,2025)
-            add_calendar_part(0, 2, 9,30,2025)
-
-            async function load_calendar() {
-                
+            function do_the_thing() {
+                cc.innerHTML = '';
+                for (let i = 0; i < 10; i++) {
+                    add_calendar_part(0, new Date(Date.now() + oneday*i));
+                }
             }
+            do_the_thing();
 
 
+            function add_event() {
+                let title = titleinput.value;
+                let desc = descinput.value;
+                var start_date = startinput.value;
+                var end_date = endinput.value;
+                let repeat = repeatinput.checked;
+                let sunday = suninput.checked;
+                let monday = moninput.checked;
+                let tuesday = tueinput.checked;
+                let wednesday = wedinput.checked;
+                let thursday = thuinput.checked;
+                let friday = friinput.checked;
+                let saturday = satinput.checked;
 
+                if (title === '' || desc === '' || start_date === '' || end_date === '' || repeat === undefined || sunday === undefined || monday === undefined || tuesday === undefined || wednesday === undefined || thursday === undefined || friday === undefined || saturday === undefined) {
+                    alert('Please fill in all boxes before proceeding.');
+                    return;
+                }
+
+                start_date = local_date_to_utc(start_date);
+                end_date = local_date_to_utc(end_date);
+
+                if (Date.parse(end_date.toString()) < Date.parse(start_date.toString())) {
+                    alert('Please change the ending time to be after the starting time.');
+                    return;
+                }
+
+                var days = [];
+                var i = 0;
+                for (let d of [sunday, monday, tuesday, wednesday, thursday, friday, saturday]) {
+                    if (!d) continue;
+                    days.push((i - start_date.getDay() + 14) % 7);
+                    i++;
+                }
+
+
+                var hcolor = Math.floor(Math.random() * 16777215).toString(16);
+                while (hcolor.length < 6) {
+                    hcolor = "0" + hcolor;
+                }
+
+                cal_data.events.push({
+                    'name': title,
+                    'desc': desc,
+                    'time': {
+                        'all_day': false, // if all day ignore timezones
+                        'start': [start_date.getUTCFullYear(), start_date.getUTCDay(), start_date.getUTCMonth(), start_date.getUTCDate(), start_date.getUTCHours(), start_date.getUTCMinutes(), start_date.getUTCSeconds()], // year day month date hours minutes seconds
+                        'end': [end_date.getUTCFullYear(), end_date.getUTCDay(), end_date.getUTCMonth(), end_date.getUTCDate(), end_date.getUTCHours(), end_date.getUTCMinutes(), end_date.getUTCSeconds()],
+                        'repeat': (repeat ? {
+                            'repeat_type': 'week', // day, week, month, year
+                            'days': days,
+                        } : null)
+                    },
+                    'color': `#${hcolor}`,
+                });
+
+                localStorage.setItem('cal_data', JSON.stringify(cal_data));
+
+                do_the_thing();
+            }
 
 
 
@@ -393,7 +705,9 @@
             var still_updating = false;
 
             addEventListener('mousemove', (e) => {
-                let is_target = (e.target.parentElement && e.target.parentElement.className == 'event');
+                mouse = [e.x, e.y];
+
+                let is_target = (e.target.parentElement && e.target.parentElement.className === 'event');
                 if (still_updating || is_target) {
                     hovertext.style.top = `${e.y}px`;
                     hovertext.style.left = `${e.x}px`;
@@ -409,10 +723,13 @@
                     if (hovertext.style.opacity != 0) {
                         setTimeout(() => {
                             still_updating = false;
-                            console.log(still_updating)
                         }, 200);
                     }
                     hovertext.style.opacity = 0;
+                }
+
+                if (is_clickdragging) {
+
                 }
             });
 
