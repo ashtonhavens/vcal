@@ -337,50 +337,7 @@
             var vff = localStorage.getItem('cal_data');
 
             var cal_data = vff ? JSON.parse(vff) : {
-                'events': [
-                    // {
-                    //     'name': 'Event',
-                    //     'desc': 'Description',
-                    //     'time': {
-                    //         'all_day': false, // if all day ignore timezones
-                    //         'start': [2009, 1, 2, 30, 21, 30, 0], // year day month date hours minutes seconds
-                    //         'end': null,
-                    //         'repeat': {
-                    //             'repeat_type': 'year', // day, week, month, year
-                    //             'days': [0],
-                    //         }
-                    //     },
-                    //     'color': '#ffffff',
-                    // },
-                    // {
-                    //     'name': 'Event',
-                    //     'desc': 'lorem ipsum dolor sit amet, consectetur adisciping elit',
-                    //     'time': {
-                    //         'all_day': false, // if all day ignore timezones
-                    //         'start': [2025, 2, 9, 21, 21, 30, 0], // year day month date hours minutes seconds
-                    //         'end': [2025, 2, 9, 22, 12, 30, 0],
-                    //         'repeat': {
-                    //             'repeat_type': 'week',
-                    //             'days': [0, 1],
-                    //         }
-                    //     },
-                    //     'color': '#9fff9f',
-                    // },
-                    // {
-                    //     'name': 'fqwefwe',
-                    //     'desc': 'wwwwwwww',
-                    //     'time': {
-                    //         'all_day': false, // if all day ignore timezones
-                    //         'start': [2025, 2, 10, 4, 6, 30, 0], // year day month date hours minutes seconds
-                    //         'end': [2025, 2, 10, 4, 12, 30, 0],
-                    //         'repeat': {
-                    //             'repeat_type': 'week',
-                    //             'days': [0],
-                    //         }
-                    //     },
-                    //     'color': '#ff6f4b',
-                    // },
-                ],
+                'events': [],
             };
 
             const oneday = 1000 * 60 * 60 * 24;
