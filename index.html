@@ -20,6 +20,15 @@
                 position: absolute;
                 z-index: 1000;
                 pointer-events: none;
+                max-width: 250px;
+                transition: ease 0.2s opacity;
+            }
+            #hovertitle {
+                font-weight: 600;
+                font-size: 18px;
+            }
+            #hoverdesc {
+                font-size: 16px;
             }
 
 
@@ -164,12 +173,16 @@
         </div>
 
         <div id="hovertext">
-
+            <div id="hovertitle"></div>
+            <div id="hoverdesc"></div>
+            <div id="hoverdate"></div>
         </div>
 
         <script>
             const m_cc = document.getElementById('main-calendar-container');
             const cc = document.getElementById('calendar-container');
+
+            const months = 'January February March April May June July August September October November December'.split(' ');
 
             const cal_data = {
                 'events': [
@@ -189,7 +202,7 @@
                     },
                     {
                         'name': 'Event',
-                        'desc': 'Description',
+                        'desc': 'lorem ipsum dolor sit amet, consectetur adisciping elit',
                         'time': {
                             'all_day': false, // if all day ignore timezones
                             'start': [2025, 2, 9, 28, 21, 30, 0], // year day month date hours minutes seconds
@@ -261,11 +274,15 @@
 
                     let rtype = event.time.repeat ? event.time.repeat.repeat_type : '';
 
+                    var visdate = '';
+
                     let indeterminate_year = rtype == 'year' || (((end_date && year == end_date.getFullYear()) || year == start_date.getFullYear()));
                     let between_year = !indeterminate_year && end_date && year > start_date.getFullYear() && year < end_date.getFullYear();
 
-                    if (between_year) vis = ['0px', '100%'];
-                    else if (indeterminate_year) {
+                    if (between_year) {
+                        vis = ['0px', '100%'];
+                        visdate = `${months[start_date.getMonth()].substr(0,2)}`;
+                    } else if (indeterminate_year) {
                         let indeterminate_month = rtype == 'month' || (((end_date && month == end_date.getMonth()) || month == start_date.getMonth()));
                         let between_month = !indeterminate_month && end_date && month > start_date.getMonth() && month < end_date.getMonth();
                         
@@ -297,7 +314,7 @@
 
                     if (vis) {
                         events += `
-                        <div class="event" style="left: ${vis[0]}; width: ${vis[1]}" _title="${event.name}" _desc="${event.desc}">
+                        <div class="event" style="left: ${vis[0]}; width: ${vis[1]}" _title="${event.name}" _desc="${event.desc}" _date="${visdate}">
                             <div class="event-body" style="background-color: ${event.color};"></div>
                         </div>
                         `;
@@ -370,13 +387,31 @@
 
 
             const hovertext = document.getElementById('hovertext');
+            const hovertitle = document.getElementById('hovertitle');
+            const hoverdesc = document.getElementById('hoverdesc');
+            const hoverdate = document.getElementById('hoverdate');
+            var still_updating = false;
+
             addEventListener('mousemove', (e) => {
-                if (e.target.parentElement && e.target.parentElement.className == 'event') {
-                    hovertext.style.top = `${e.y}px`
-                    hovertext.style.left = `${e.x}px`
-                    hovertext.style.opacity = 1;
-                    hovertext.innerText = e.target.parentElement.getAttribute('_title')
-                } else {
+                let is_target = (e.target.parentElement && e.target.parentElement.className == 'event');
+                if (still_updating || is_target) {
+                    hovertext.style.top = `${e.y}px`;
+                    hovertext.style.left = `${e.x}px`;
+                    if (is_target) {
+                        hovertext.style.opacity = 1;
+                        hovertitle.innerText = e.target.parentElement.getAttribute('_title');
+                        hoverdesc.innerText = e.target.parentElement.getAttribute('_desc');
+                        hoverdate.innerText = e.target.parentElement.getAttribute('_date');
+                        still_updating = true;
+                    }
+                }
+                if (!is_target) {
+                    if (hovertext.style.opacity != 0) {
+                        setTimeout(() => {
+                            still_updating = false;
+                            console.log(still_updating)
+                        }, 200);
+                    }
                     hovertext.style.opacity = 0;
                 }
             });
